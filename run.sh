@@ -13,14 +13,16 @@
 #  UDP 10001 	    AP discovery
 #  UDP 1900 	     "Make controller discoverable on L2 network" in controller settings.
 
+#--net=host makes the docker container run in the same network as the host (e.g. NOT NAT)
+
+# This cannot be combined with --rm (naturally), since container is removed once
+# stopped
+# --restart=unless-stopped \
+
 docker run --rm \
-           --init \
-            -p 8080:8080 \
-            -p 8443:8443 \
-            -p 3478:3478/udp \
-            -p 10001:10001/udp \
-            -e "RUNAS_UID0=false" \
-            -e "TZ='Europe/Stockholm'" \
+           --net=host \
+            -e RUNAS_UID0=false \
+            -e TZ='Europe/Stockholm' \
             -v /home/mco/unifi:/unifi \
             --name unifi \
             mco/unifi &
